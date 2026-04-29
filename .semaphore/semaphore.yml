@@ -17,7 +17,7 @@ blocks:
     dependencies: []
     task:
       jobs:
-        - name: "\U0001F7E2 Run Tests"
+        - name: Build images
           commands:
             - checkout
             - cd 1-deployment
@@ -32,10 +32,9 @@ blocks:
       - Build and Push to DockerHUB
     task:
       jobs:
-        - name: "\U0001F4E6 Deploy to Production"
+        - name: kubernets
           commands:
             - '#Configure kubectl using the provided kubeconfig secret.'
-            - kubectl create namespace g2 || true.
             - kubectl config set-context --current --namespace=g2
             - '#Deploy the manifests into that namespace:'
             - kubectl apply -f deployment.yml
