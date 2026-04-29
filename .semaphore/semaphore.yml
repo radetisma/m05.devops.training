@@ -30,39 +30,35 @@ blocks:
             - 'docker push $DOCKER_USERNAME/my-flask-image:latest'
       secrets:
         - name: Docker Rade
-  - name: Deploy to Kubernets - Blue
+  - name: Deploy Stable
     dependencies:
       - Build and Push to DockerHUB
     task:
       jobs:
-        - name: kubernets
+        - name: Deploy
           commands:
-            - cd 2-blue-green-deployment
+            - cd 3-canary-deployment
             - '#Configure kubectl using the provided kubeconfig secret.'
             - kubectl config set-context --current --namespace=g2
-            - '#Deploy the manifests into that namespace:'
-            - kubectl apply -f deployment-blue.yml
-            - kubectl apply -f service-blue.yml
+            - kubectl apply -f deployment-stable.yml
+            - kubectl apply -f service.yml
             - '#Wait for the rollout to complete'
-            - kubectl rollout status deployment/flask-app-blue
+            - kubectl rollout status deployment/flask-app-stable
             - kubectl get svc flask-app
       secrets:
         - name: kubeconfig
-  - name: 'Deploy to Kubernets - Green '
+  - name: Deploy Canary
     dependencies:
-      - Deploy to Kubernets - Blue
+      - Build and Push to DockerHUB
     task:
       jobs:
         - name: Deploy
           commands:
-            - cd 2-blue-green-deployment
+            - cd 3-canary-deployment
             - '#Configure kubectl using the provided kubeconfig secret.'
             - kubectl config set-context --current --namespace=g2
-            - '#Deploy the manifests into that namespace:'
-            - kubectl apply -f deployment-green.yml
-            - kubectl apply -f service-green.yml
-            - '#Wait for the rollout to complete'
-            - kubectl rollout status deployment/flask-app-green
+            - kubectl apply -f deployment-canary.yml
+            - kubectl rollout status deployment/flask-app-canary
             - kubectl get svc flask-app
       secrets:
         - name: kubeconfig
