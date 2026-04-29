@@ -30,7 +30,7 @@ blocks:
             - 'docker push $DOCKER_USERNAME/my-flask-image:latest'
       secrets:
         - name: Docker Rade
-  - name: Deploy to Kubernets
+  - name: Deploy to Kubernets - Blue
     dependencies:
       - Build and Push to DockerHUB
     task:
@@ -48,3 +48,19 @@ blocks:
             - kubectl get svc flask-app
       secrets:
         - name: kubeconfig
+  - name: 'Deploy to Kubernets - Green '
+    dependencies:
+      - Build and Push to DockerHUB
+    task:
+      jobs:
+        - name: Deploy
+          commands:
+            - cd 2-blue-green-deployment
+            - '#Configure kubectl using the provided kubeconfig secret.'
+            - kubectl config set-context --current --namespace=g2
+            - '#Deploy the manifests into that namespace:'
+            - kubectl apply -f deployment-green.yml
+            - kubectl apply -f service-green.yml
+            - '#Wait for the rollout to complete'
+            - kubectl rollout status deployment/flask-app-green
+            - kubectl get svc flask-app
