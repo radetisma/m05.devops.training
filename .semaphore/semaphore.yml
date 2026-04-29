@@ -37,14 +37,14 @@ blocks:
       jobs:
         - name: kubernets
           commands:
-            - cd 1-deployment
+            - cd 2-blue-green-deployment
             - '#Configure kubectl using the provided kubeconfig secret.'
             - kubectl config set-context --current --namespace=g2
             - '#Deploy the manifests into that namespace:'
-            - kubectl apply -f deployment.yml
-            - kubectl apply -f service.yml
+            - kubectl apply -f deployment-blue.yml
+            - kubectl apply -f service-blue.yml
             - '#Wait for the rollout to complete'
-            - kubectl rollout status deployment/flask-app
+            - kubectl rollout status deployment/flask-app-blue
             - kubectl get svc flask-app
       secrets:
         - name: kubeconfig
