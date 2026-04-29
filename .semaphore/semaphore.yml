@@ -34,6 +34,7 @@ blocks:
       jobs:
         - name: kubernets
           commands:
+            - cd 1-deployment
             - '#Configure kubectl using the provided kubeconfig secret.'
             - kubectl config set-context --current --namespace=g2
             - '#Deploy the manifests into that namespace:'
