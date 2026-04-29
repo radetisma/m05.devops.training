@@ -50,7 +50,7 @@ blocks:
         - name: kubeconfig
   - name: 'Deploy to Kubernets - Green '
     dependencies:
-      - Build and Push to DockerHUB
+      - Deploy to Kubernets - Blue
     task:
       jobs:
         - name: Deploy
