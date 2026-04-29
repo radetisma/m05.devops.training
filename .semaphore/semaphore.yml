@@ -23,7 +23,7 @@ blocks:
       jobs:
         - name: Build images
           commands:
-            - '#checkout'
+            - '#checkout '
             - cd 1-deployment
             - docker build -t my-flask-image .
             - 'docker tag my-flask-image $DOCKER_USERNAME/my-flask-image:latest'
