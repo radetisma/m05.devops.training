@@ -23,7 +23,6 @@ blocks:
       jobs:
         - name: Build images
           commands:
-            - '#checkout '
             - cd 1-deployment
             - docker build -t my-flask-image .
             - 'docker tag my-flask-image $DOCKER_USERNAME/my-flask-image:latest'
@@ -44,6 +43,8 @@ blocks:
             - '#Deploy the manifests into that namespace:'
             - kubectl apply -f deployment.yml
             - kubectl apply -f service.yml
-            - '#Wait for the rollout to complete (kubectl rollout status deployment/flask-app)'
+            - '#Wait for the rollout to complete'
+            - kubectl rollout status deployment/flask-app
+            - kubectl get svc flask-app
       secrets:
         - name: kubeconfig
